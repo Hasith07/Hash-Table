@@ -3,13 +3,13 @@ import java.util.concurrent.*;
 
 public class RealTimeAnalytics {
 
-    // pageUrl -> total visit count
+
     private ConcurrentHashMap<String, Integer> pageViews;
 
-    // pageUrl -> unique users
+
     private ConcurrentHashMap<String, Set<String>> uniqueVisitors;
 
-    // traffic source -> count
+
     private ConcurrentHashMap<String, Integer> sourceCount;
 
     public RealTimeAnalytics() {
@@ -20,22 +20,22 @@ public class RealTimeAnalytics {
         startDashboardUpdater();
     }
 
-    // Process incoming event
+
     public void processEvent(String url, String userId, String source) {
 
-        // Update page views
+
         pageViews.merge(url, 1, Integer::sum);
 
-        // Update unique visitors
+
         uniqueVisitors
                 .computeIfAbsent(url, k -> ConcurrentHashMap.newKeySet())
                 .add(userId);
 
-        // Update traffic source
+
         sourceCount.merge(source, 1, Integer::sum);
     }
 
-    // Get top 10 pages
+
     private List<Map.Entry<String, Integer>> getTopPages() {
         PriorityQueue<Map.Entry<String, Integer>> minHeap =
                 new PriorityQueue<>(Map.Entry.comparingByValue());
